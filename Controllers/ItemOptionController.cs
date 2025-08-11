@@ -96,7 +96,7 @@ namespace WebScoringApp.Controllers
 
             var itemOption = await _context.ItemOptions
                 .Include(io => io.GroupItem)
-                .ThenInclude(gi => gi.GroupInformation)
+                .ThenInclude(gi => gi!.GroupInformation)
                 .FirstOrDefaultAsync(io => io.Id == id);
             if (itemOption == null)
             {
@@ -106,13 +106,13 @@ namespace WebScoringApp.Controllers
             // Ambil semua GroupInformation untuk dropdown pertama
             ViewBag.GroupInformations = await _context.GroupInformations.ToListAsync();
             // Simpan GroupInformationId dari GroupItem yang dipilih
-            ViewBag.SelectedGroupInfoId = itemOption.GroupItem.GroupInformationId;
+            ViewBag.SelectedGroupInfoId = itemOption?.GroupItem?.GroupInformationId;
 
             // Ambil semua GroupItem dari GroupInformation terpilih
             ViewBag.GroupItems = await _context.GroupItems
-                .Where(gi => gi.GroupInformationId == itemOption.GroupItem.GroupInformationId)
+                .Where(gi => gi.GroupInformationId == itemOption!.GroupItem!.GroupInformationId)
                 .ToListAsync();
-            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Name", itemOption.GroupItemId);
+            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Name", itemOption?.GroupItemId);
             return View(itemOption);
         }
 

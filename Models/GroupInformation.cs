@@ -13,20 +13,5 @@ namespace WebScoringApp.Models
 
         public ICollection<GroupItem> GroupItems { get; set; } = new List<GroupItem>();
 
-        // public decimal GetAverageBobotB()
-        // {
-        //     var itemOptions = GroupItems
-        //     .Where(gi => gi != null && gi.ItemOptions != null)
-        //     .SelectMany(gi => gi.ItemOptions)
-        //     .Where(io => io.GroupItem is not null);
-
-        //     if (!itemOptions.Any()) return 0;
-
-        //     decimal totalFD = itemOptions
-        //     .Sum(io => io.BobotF * io.GroupItem!.BobotD);
-        //     decimal averageFD = totalFD / itemOptions.Count();
-
-        //     return BobotB * averageFD;
-        // }
     }
 }

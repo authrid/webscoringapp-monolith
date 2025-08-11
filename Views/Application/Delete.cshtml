@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Delete";
     var groups = Model.ApplicationSelections
-        .Select(s => s.ItemOption.GroupItem.GroupInformation)
+        .Select(s => s.ItemOption!.GroupItem!.GroupInformation)
         .Distinct()
         .ToList();
 }
@@ -25,7 +25,7 @@
             {
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" type="button" data-bs-toggle="tab" data-bs-target="#group-@i" role="tab" disabled>
-                        @groups[i].Name
+                        @groups[i]?.Name
                     </button>
                 </li>
             }
@@ -82,7 +82,7 @@
             {
                 var group = groups[i];
                 var groupItems = Model.ApplicationSelections
-                    .Where(s => s.ItemOption.GroupItem.GroupInformation.Id == group.Id)
+                    .Where(s => s.ItemOption!.GroupItem!.GroupInformation!.Id == group!.Id)
                     .ToList();
 
                 <div class="tab-pane fade" id="group-@i" role="tabpanel">
@@ -99,8 +99,8 @@
                             @foreach (var sel in groupItems)
                             {
                                 <tr class="@(sel.HighRisk ? "table-danger" : "")">
-                                    <td>@sel.ItemOption.GroupItem.Name</td>
-                                    <td style="@(sel.HighRisk ? "color:red;" : "")">@sel.ItemOption.Name</td>
+                                    <td>@sel.ItemOption?.GroupItem?.Name</td>
+                                    <td style="@(sel.HighRisk ? "color:red;" : "")">@sel.ItemOption?.Name</td>
                                     <td>@sel.Bobot.ToString("N2")</td>
                                     <td>@(sel.HighRisk ? "Yes" : "No")</td>
                                 </tr>

@@ -4,8 +4,6 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScoringApp", "WebScoringApp.csproj", "{26C223F9-2BB9-C28B-3E40-77CBCD878013}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScoringAPI", "..\..\Experimental\WebScoringAPI\WebScoringAPI.csproj", "{21A15E16-351B-49F5-8355-A6264E641984}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

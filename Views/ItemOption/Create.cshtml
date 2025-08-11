@@ -17,10 +17,20 @@
                 <label class="form-label fw-bold">Group Information</label>
                 <select id="GroupInformationId" class="form-select">
                     <option value="">-- Pilih Group Information --</option>
-                    @foreach (var group in ViewBag.GroupInformations as List<WebScoringApp.Models.GroupInformation>)
+                    @{
+                        var groups = ViewBag.GroupInformations as List<WebScoringApp.Models.GroupInformation>;
+                        if (groups != null)
+                        {
+                            foreach (var group in groups)
+                            {
+                                <option value="@group.Id">@group.Name</option>
+                            }
+                        }
+                    }
+                    @* @foreach (var group in ViewBag.GroupInformations as List<WebScoringApp.Models.GroupInformation>)
                     {
                         <option value="@group.Id">@group.Name</option>
-                    }
+                    } *@
                 </select>
             </div>
 

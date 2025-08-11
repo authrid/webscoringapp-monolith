@@ -22,15 +22,21 @@
                 <label class="form-label fw-bold">Group Information</label>
                 <select id="GroupInformationId" class="form-select">
                     <option value="">-- Pilih Group Information --</option>
-                    @foreach (var group in groupInformations)
-                    {
-                        if (group.Id == selectedGroupInfoId)
+                    @{
+                        var groups = groupInformations;
+                        if (groups != null)
                         {
-                            <option value="@group.Id" selected="selected">@group.Name</option>
-                        }
-                        else
-                        {
-                            <option value="@group.Id">@group.Name</option>
+                            foreach (var group in groups)
+                            {
+                                if (group.Id == selectedGroupInfoId)
+                                {
+                                    <option value="@group.Id" selected="selected">@group.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@group.Id">@group.Name</option>
+                                }
+                            }
                         }
                     }
                 </select>

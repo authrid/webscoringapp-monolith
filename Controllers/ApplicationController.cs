@@ -38,8 +38,8 @@ namespace WebScoringApp.Controllers
             var application = await _context.Applications
                 .Include(a => a.ApplicationSelections)
                     .ThenInclude(s => s.ItemOption)
-                    .ThenInclude(io => io.GroupItem)
-                    .ThenInclude(gi => gi.GroupInformation)
+                    .ThenInclude(io => io!.GroupItem)
+                    .ThenInclude(gi => gi!.GroupInformation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             
             if (application == null) return NotFound();
@@ -110,7 +110,7 @@ namespace WebScoringApp.Controllers
                         .Include(o => o.GroupItem)
                         .FirstOrDefaultAsync(o => o.Id == itemOptionId);
 
-                    if (option != null)
+                    if (option != null && option.GroupItem != null)
                     {
                         var bobotItem = option.BobotF * (option.GroupItem.BobotD / 100m);
 
@@ -166,7 +166,7 @@ namespace WebScoringApp.Controllers
             var application = await _context.Applications
                 .Include(a => a.ApplicationSelections)
                 .ThenInclude(s => s.ItemOption)
-                .ThenInclude(io => io.GroupItem)
+                .ThenInclude(io => io!.GroupItem)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (application == null)
@@ -230,10 +230,10 @@ namespace WebScoringApp.Controllers
 
                 var option = await _context.ItemOptions
                     .Include(o => o.GroupItem)
-                    .ThenInclude(gi => gi.GroupInformation)
+                    .ThenInclude(gi => gi!.GroupInformation)
                     .FirstOrDefaultAsync(o => o.Id == itemOptionId && o.GroupItemId == groupItemId);
 
-                if (option != null)
+                if (option != null && option.GroupItem != null)
                 {
                     var bobotItem = option.BobotF * (option.GroupItem.BobotD / 100m);
                     newSelections.Add(new ApplicationSelection
@@ -270,8 +270,8 @@ namespace WebScoringApp.Controllers
             var application = await _context.Applications
                 .Include(a => a.ApplicationSelections)
                     .ThenInclude(s => s.ItemOption)
-                    .ThenInclude(io => io.GroupItem)
-                    .ThenInclude(gi => gi.GroupInformation)
+                    .ThenInclude(io => io!.GroupItem)
+                    .ThenInclude(gi => gi!.GroupInformation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             
             if (application == null) return NotFound();

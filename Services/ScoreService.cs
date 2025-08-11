@@ -21,11 +21,14 @@ namespace WebScoringApp.Services
             var app = _context.Applications
                 .Include(a => a.ApplicationSelections)
                     .ThenInclude(s => s.ItemOption)
-                        .ThenInclude(io => io.GroupItem)
-                            .ThenInclude(gi => gi.GroupInformation)
+                        .ThenInclude(io => io!.GroupItem)
+                            .ThenInclude(gi => gi!.GroupInformation)
                 .FirstOrDefault(a => a.Id == applicationId);
 
-            return CalculateFromAppInstance(app);
+            if (app != null)
+                return CalculateFromAppInstance(app);
+            
+            return (0, "Unknown");
         }
 
         // Overload untuk hitung langsung dari object Application yang sudah ada di memory
@@ -38,11 +41,11 @@ namespace WebScoringApp.Services
 
             var groupedScores = app.ApplicationSelections
                 .Where(s => s.ItemOption?.GroupItem?.GroupInformation != null)
-                .GroupBy(s => s.ItemOption.GroupItem.GroupInformation)
+                .GroupBy(s => s.ItemOption!.GroupItem!.GroupInformation)
                 .Select(g =>
                 {
                     var sumBobot = g.Sum(s => s.Bobot);
-                    var bobotB = g.Key.BobotB;
+                    var bobotB = g.Key!.BobotB;
                     return sumBobot * (bobotB / 100);
                 });
 
