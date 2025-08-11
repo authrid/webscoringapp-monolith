@@ -1,0 +1,48 @@
+@model GroupItem
+@{
+    ViewData["Title"] = "Create Item";
+}
+
+<h2 class="text-center mb-4">@ViewData["Title"]</h2>
+<hr />
+
+<div class="card shadow-sm mx-auto" style="max-width: 500px;">
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="GroupInformationId" class="form-label fw-bold"></label>
+                <select asp-for="GroupInformationId" class="form-select" asp-items="ViewBag.GroupInformationId">
+                    <option value="">-- Pilih Group Information --</option>
+                </select>
+                <span asp-validation-for="GroupInformationId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label fw-bold"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="BobotD" class="form-label fw-bold"></label>
+                <input asp-for="BobotD" class="form-control" />
+                <span asp-validation-for="BobotD" class="text-danger"></span>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="bi bi-save"></i> Create
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

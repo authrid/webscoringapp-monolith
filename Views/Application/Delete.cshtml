@@ -1,0 +1,121 @@
+@model Application
+
+@{
+    ViewData["Title"] = "Delete";
+    var groups = Model.ApplicationSelections
+        .Select(s => s.ItemOption.GroupItem.GroupInformation)
+        .Distinct()
+        .ToList();
+}
+
+<h1>Delete Application</h1>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <h3 class="text-danger">Are you sure you want to delete this?</h3>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="detailTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#application" role="tab">
+                    Data Application
+                </button>
+            </li>
+            @for (int i = 0; i < groups.Count; i++)
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" type="button" data-bs-toggle="tab" data-bs-target="#group-@i" role="tab" disabled>
+                        @groups[i].Name
+                    </button>
+                </li>
+            }
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-3" id="detailTabsContent">
+            <!-- Application Tab -->
+            <div class="tab-pane fade show active" id="application" role="tabpanel">
+                <table class="table table-bordered mb-0">
+                    <tbody>
+                        <tr>
+                            <th style="width:30%">@Html.DisplayNameFor(model => model.AppNo)</th>
+                            <td>@Model.AppNo</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <td>@Model.Name</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.BirthPlace)</th>
+                            <td>@Model.BirthPlace</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+                            <td>@Model.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Gender)</th>
+                            <td>@Model.Gender</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.PortalCode)</th>
+                            <td>@Model.PortalCode</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Address)</th>
+                            <td>@Model.Address</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.TotalScore)</th>
+                            <td>@Model.TotalScore.ToString("N2")</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.RiskCategoryName)</th>
+                            <td>@Model.RiskCategoryName</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Group Tabs -->
+            @for (int i = 0; i < groups.Count; i++)
+            {
+                var group = groups[i];
+                var groupItems = Model.ApplicationSelections
+                    .Where(s => s.ItemOption.GroupItem.GroupInformation.Id == group.Id)
+                    .ToList();
+
+                <div class="tab-pane fade" id="group-@i" role="tabpanel">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Group Item</th>
+                                <th>Item Option</th>
+                                <th>Bobot</th>
+                                <th>High Risk</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sel in groupItems)
+                            {
+                                <tr class="@(sel.HighRisk ? "table-danger" : "")">
+                                    <td>@sel.ItemOption.GroupItem.Name</td>
+                                    <td style="@(sel.HighRisk ? "color:red;" : "")">@sel.ItemOption.Name</td>
+                                    <td>@sel.Bobot.ToString("N2")</td>
+                                    <td>@(sel.HighRisk ? "Yes" : "No")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <!-- Delete Form -->
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

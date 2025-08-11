@@ -1,0 +1,94 @@
+@model IEnumerable<WebScoringApp.Models.GroupInformation>
+
+@{
+    int groupIndex = 0;
+}
+
+<h1 class="mb-4">Item Option</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary mb-3">+ Create New</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+    <div class="accordion" id="groupInfoAccordion">
+        @foreach (var groupInfo in Model)
+        {
+            var groupInfoCollapseId = $"collapseGroupInfo{groupIndex}";
+            var groupInfoHeadingId = $"headingGroupInfo{groupIndex}";
+
+            <div class="accordion-item mb-3 shadow-sm">
+                <h2 class="accordion-header" id="@groupInfoHeadingId">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#@groupInfoCollapseId">
+                        📂 @groupInfo.Name
+                    </button>
+                </h2>
+                <div id="@groupInfoCollapseId" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        @if (groupInfo.GroupItems != null && groupInfo.GroupItems.Any())
+                        {
+                            <div class="accordion" id="groupItemAccordion-@groupIndex">
+                                @for (int itemIndex = 0; itemIndex < groupInfo.GroupItems.Count; itemIndex++)
+                                {
+                                    var groupItem = groupInfo.GroupItems.ElementAt(itemIndex);
+                                    var groupItemCollapseId = $"collapseGroupItem{groupIndex}-{itemIndex}";
+                                    var groupItemHeadingId = $"headingGroupItem{groupIndex}-{itemIndex}";
+
+                                    if (groupItem.ItemOptions == null || !groupItem.ItemOptions.Any()) continue;
+
+                                    <div class="accordion-item mb-2">
+                                        <h2 class="accordion-header" id="@groupItemHeadingId">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@groupItemCollapseId">
+                                                📂 @groupItem.Name
+                                            </button>
+                                        </h2>
+                                        <div id="@groupItemCollapseId" class="accordion-collapse collapse">
+                                            <div class="accordion-body p-0">
+                                                <table class="table table-striped table-bordered table-hover mb-0">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Option Name</th>
+                                                            <th>Bobot</th>
+                                                            <th>High Risk</th>
+                                                            <th class="text-center" style="width:180px;">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var option in groupItem.ItemOptions)
+                                                        {
+                                                            <tr>
+                                                                <td>@option.Name</td>
+                                                                <td>@option.BobotF</td>
+                                                                <td>@option.HighRiskText</td>
+                                                                <td class="text-center">
+                                                                    <a asp-action="Edit" asp-route-id="@option.Id" class="text-primary me-2">Edit</a>
+                                                                    <a asp-action="Details" asp-route-id="@option.Id" class="text-info me-2">Details</a>
+                                                                    <a asp-action="Delete" asp-route-id="@option.Id" class="text-danger">Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning mb-0">Tidak ada Group Item untuk group ini.</div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            groupIndex++;
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">Tidak ada data Group Information.</div>
+}

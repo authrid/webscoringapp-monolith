@@ -1,0 +1,40 @@
+@model GroupItem
+
+@{
+    ViewData["Title"] = "Item Details";
+}
+
+<h2 class="text-center mb-4">@ViewData["Title"]</h2>
+
+<div class="card shadow-sm mx-auto" style="max-width: 500px;">
+    <div class="card-body p-0">
+        <table class="table table-bordered mb-0">
+            <tbody>
+                <tr>
+                    <th class="bg-light" style="width: 30%">@Html.DisplayNameFor(model => model.Name)</th>
+                    <td>@Model.Name</td>
+                </tr>
+                <tr>
+                    <th class="bg-light">@Html.DisplayNameFor(model => model.BobotD)</th>
+                    <td>@Model.BobotD</td>
+                </tr>
+                <tr>
+                    <th class="bg-light">@Html.DisplayNameFor(model => model.GroupInformation)</th>
+                    <td>@Model.GroupInformation.Name</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+        <i class="bi bi-pencil"></i> Edit
+    </a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger me-2">
+        <i class="bi bi-trash"></i> Delete
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div>

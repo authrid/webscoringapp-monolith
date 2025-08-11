@@ -1,0 +1,142 @@
+@model Application
+@{
+    var groups = ViewData["Groups"] as List<WebScoringApp.Models.GroupInformation>;
+    var selections = ViewData["Selections"] as Dictionary<int, int>;
+}
+
+<h1>Application Details</h1>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <!-- Nav Tabs -->
+        <ul class="nav nav-tabs" id="formTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" type="button" data-bs-toggle="tab" data-bs-target="#application" role="tab">
+                    Data Application
+                </button>
+            </li>
+            @if (groups != null && groups.Any())
+            {
+                int index = 0;
+                foreach (var group in groups)
+                {
+                    if (group.GroupItems == null || !group.GroupItems.Any()) continue;
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" type="button" data-bs-toggle="tab" data-bs-target="#group-@index" role="tab">
+                            @group.Name
+                        </button>
+                    </li>
+                    index++;
+                }
+            }
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content mt-3" id="formTabsContent">
+            <!-- Data Application -->
+            <div class="tab-pane fade show active" id="application" role="tabpanel">
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr>
+                            <th style="width:30%">@Html.DisplayNameFor(model => model.AppNo)</th>
+                            <td>@Model.AppNo</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <td>@Model.Name</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.BirthPlace)</th>
+                            <td>@Model.BirthPlace</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+                            <td>@Model.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Gender)</th>
+                            <td>@Model.Gender</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.PortalCode)</th>
+                            <td>@Model.PortalCode</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Address)</th>
+                            <td>@Model.Address</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.TotalScore)</th>
+                            <td>@Model.TotalScore.ToString("F2")</td>
+                        </tr>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.RiskCategoryName)</th>
+                            <td>@Model.RiskCategoryName</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Group Tabs -->
+            @if (groups != null && groups.Any())
+            {
+                int index = 0;
+                foreach (var group in groups)
+                {
+                    if (group.GroupItems == null || !group.GroupItems.Any()) continue;
+                    <div class="tab-pane fade" id="group-@index" role="tabpanel">
+                        <table class="table table-bordered table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:40%">Item</th>
+                                    <th>Value</th>
+                                    <th style="width:15%">High Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var groupItem in group.GroupItems)
+                                {
+                                    var selectedOption = selections != null && selections.ContainsKey(groupItem.Id)
+                                        ? groupItem.ItemOptions.FirstOrDefault(o => o.Id == selections[groupItem.Id])
+                                        : null;
+
+                                    <tr>
+                                        <td>@groupItem.Name</td>
+                                        <td>
+                                            @if (selectedOption != null)
+                                            {
+                                                <span style="color:@(selectedOption.HighRisk ? "red" : "black")">
+                                                    @selectedOption.Name
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <em class="text-muted">-</em>
+                                            }
+                                        </td>
+                                        <td>
+                                            <span style="color:@(selectedOption.HighRisk ? "red" : "black")">
+                                                @(selectedOption != null && selectedOption.HighRisk ? "Yes" : "No")
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    index++;
+                }
+            }
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-3 d-flex justify-content-between">
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+            </div>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
